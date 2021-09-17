@@ -19,25 +19,46 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
     }
+    Pessoa[] pessoas = new Pessoa[10];
+    int cont = 0;
+    
 
-    public void validateFields(){
+    public Boolean validateFields(){
         if(txtName.getText().isBlank()){
             System.out.println("nome");
+            return false;
         }
         if(txtLastName.getText().isBlank()){
             System.out.println("sobrenome");
+            return false;
         }
         if(txtCPF.getText().isBlank()){
             System.out.println("cpf");
+            return false;
         }
         if(txtBithDate.getText().isBlank()){
             System.out.println("data");
+            return false;
         }
-    }
+        return true;
+    } 
     
     public void createPessoa(String name, String lastName, String CPF, String birthDate){
-        Pessoa p1 = new Pessoa(name, lastName, CPF, birthDate);
-        System.out.println(p1.toString());
+        System.out.println(pessoas.length);
+        if(cont < 10){
+            for (int i = 0; i < pessoas.length; i++) {
+                System.out.println(pessoas[i].getCPF());
+            }
+        pessoas[cont] = new Pessoa(name, lastName, CPF, birthDate);
+        System.out.println(pessoas[0].toString() + cont);
+        cont++ ;
+        }else{
+            System.out.println("Cheio");
+            for(int i = 0; i < pessoas.length; i++){
+                System.out.println(pessoas[i].toString());
+            }
+        }
+        
         
     }
     
@@ -141,9 +162,12 @@ public class Principal extends javax.swing.JFrame {
         String lastName = txtLastName.getText();
         String strCPF = txtCPF.getText();
         String bithDate = txtBithDate.getText();
-        
-        validateFields();
+        if(validateFields()){
+            System.out.println(validateFields());
         createPessoa(name, lastName,strCPF, bithDate);
+            
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
