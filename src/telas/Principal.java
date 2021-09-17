@@ -6,6 +6,7 @@
 package telas;
 
 import classes.Pessoa;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,49 +20,54 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
     }
-    Pessoa[] pessoas = new Pessoa[10];
+//    Pessoa[] pessoas = new Pessoa[10];
+    ArrayList<Pessoa> pessoas = new ArrayList<>();
     int cont = 0;
-    
 
-    public Boolean validateFields(){
-        if(txtName.getText().isBlank()){
+    public Boolean validateFields() {
+        if (txtName.getText().isBlank()) {
             System.out.println("nome");
             return false;
         }
-        if(txtLastName.getText().isBlank()){
+        if (txtLastName.getText().isBlank()) {
             System.out.println("sobrenome");
             return false;
         }
-        if(txtCPF.getText().isBlank()){
+        if (txtCPF.getText().isBlank()) {
             System.out.println("cpf");
             return false;
         }
-        if(txtBithDate.getText().isBlank()){
+        if (txtBithDate.getText().isBlank()) {
             System.out.println("data");
             return false;
         }
         return true;
-    } 
-    
-    public void createPessoa(String name, String lastName, String CPF, String birthDate){
-        System.out.println(pessoas.length);
-        if(cont < 10){
-            for (int i = 0; i < pessoas.length; i++) {
-                System.out.println(pessoas[i].getCPF());
+    }
+
+    public void createPessoa(String name, String lastName, String CPF, String birthDate) {
+        if (cont < 10) {
+            Pessoa p = new Pessoa(name, lastName, CPF, birthDate);
+            if(findByCPF(p)){
+            pessoas.add(p);
+                System.out.println("Adiconado"+cont);
+                cont++;
+            } else{
+                System.out.println("Ja existe");
             }
-        pessoas[cont] = new Pessoa(name, lastName, CPF, birthDate);
-        System.out.println(pessoas[0].toString() + cont);
-        cont++ ;
-        }else{
+          
+        } else {
             System.out.println("Cheio");
-            for(int i = 0; i < pessoas.length; i++){
-                System.out.println(pessoas[i].toString());
+        }
+    }
+    public boolean findByCPF(Pessoa p){
+        for(int i = 0; i < pessoas.size(); i++){
+            if(p.getCPF().equals(pessoas.get(i).getCPF())){
+                return false;
             }
         }
-        
-        
+        return true;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,6 +87,7 @@ public class Principal extends javax.swing.JFrame {
         txtBithDate = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,6 +105,13 @@ public class Principal extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -124,7 +138,9 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
                 .addGap(137, 137, 137))
         );
         layout.setVerticalGroup(
@@ -150,7 +166,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(jButton2)
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
@@ -161,14 +179,24 @@ public class Principal extends javax.swing.JFrame {
         String name = txtName.getText();
         String lastName = txtLastName.getText();
         String strCPF = txtCPF.getText();
-        String bithDate = txtBithDate.getText();
-        if(validateFields()){
+        String birthDate = txtBithDate.getText();
+        if (validateFields()) {
             System.out.println(validateFields());
-        createPessoa(name, lastName,strCPF, bithDate);
-            
+            createPessoa(name, lastName, strCPF, birthDate);
+
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String name = txtName.getText();
+        String lastName = txtLastName.getText();
+        String strCPF = txtCPF.getText();
+        String birthDate = txtBithDate.getText();
+        Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
+        System.out.println(findByCPF(p));
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,16 +212,21 @@ public class Principal extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -208,6 +241,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
