@@ -6,7 +6,15 @@
 package telas;
 
 import classes.Pessoa;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,13 +24,13 @@ public class Principal extends javax.swing.JFrame {
 
     /**
      * Creates new form Proncipal
+     * @throws java.text.ParseException
      */
-    public Principal() {
+    public Principal() throws ParseException {
         initComponents();
     }
-//    Pessoa[] pessoas = new Pessoa[10];
+
     ArrayList<Pessoa> pessoas = new ArrayList<>();
-    int cont = 0;
 
     public Boolean validateFields() {
         if (txtName.getText().isBlank()) {
@@ -37,31 +45,42 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("cpf");
             return false;
         }
-        if (txtBithDate.getText().isBlank()) {
+        if (txtBirthData.getText().isBlank()) {
             System.out.println("data");
             return false;
         }
         return true;
     }
 
-    public void createPessoa(String name, String lastName, String CPF, String birthDate) {
-        if (cont < 10) {
-            Pessoa p = new Pessoa(name, lastName, CPF, birthDate);
-            if(findByCPF(p)){
-            pessoas.add(p);
-                System.out.println("Adiconado"+cont);
-                cont++;
-            } else{
+    public Pessoa createObjectPessoa() {
+        String name = txtName.getText();
+        String lastName = txtLastName.getText();
+        String strCPF = txtCPF.getText();
+        String birthDate = txtBirthData.getText();
+        Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
+        System.out.println(birthDate);
+
+        return p;
+    }
+
+    public void createPessoa(Pessoa p) {
+        if (pessoas.size() < 10) {
+//        if (cont < 10) {
+            if (findByCPF(p)) {
+                pessoas.add(p);
+                System.out.println("Adiconado");
+            } else {
                 System.out.println("Ja existe");
             }
-          
+
         } else {
             System.out.println("Cheio");
         }
     }
-    public boolean findByCPF(Pessoa p){
-        for(int i = 0; i < pessoas.size(); i++){
-            if(p.getCPF().equals(pessoas.get(i).getCPF())){
+
+    public boolean findByCPF(Pessoa p) {
+        for (int i = 0; i < pessoas.size(); i++) {
+            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
                 return false;
             }
         }
@@ -82,12 +101,12 @@ public class Principal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtLastName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtCPF = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtBithDate = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        txtBirthData = new javax.swing.JFormattedTextField();
+        txtCPF = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,10 +134,28 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        try {
+            txtBirthData.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addGap(137, 137, 137))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,18 +167,12 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtName)
+                            .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                             .addComponent(txtLastName)
-                            .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                            .addComponent(txtBithDate, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCPF)))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addGap(137, 137, 137))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,14 +192,14 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtBithDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addComponent(jButton1)
                 .addGap(31, 31, 31)
                 .addComponent(jButton2)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -176,26 +207,31 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String name = txtName.getText();
-        String lastName = txtLastName.getText();
-        String strCPF = txtCPF.getText();
-        String birthDate = txtBithDate.getText();
-        if (validateFields()) {
-            System.out.println(validateFields());
-            createPessoa(name, lastName, strCPF, birthDate);
 
+        if (validateFields()) {
+            createPessoa(createObjectPessoa());
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        String name = txtName.getText();
-        String lastName = txtLastName.getText();
-        String strCPF = txtCPF.getText();
-        String birthDate = txtBithDate.getText();
-        Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
-        System.out.println(findByCPF(p));
+
+        Calendar birthDate = Calendar.getInstance();
+        try {
+            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText().toString()));
+            Calendar dateNow = Calendar.getInstance();
+            int years = dateNow.get(Calendar.YEAR ) - birthDate.get(Calendar.YEAR);
+            birthDate.add(Calendar.YEAR, years);
+            if(dateNow.before(birthDate)){
+                years--;
+            }
+            System.out.println(years + "anos");
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -234,7 +270,11 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                try {
+                    new Principal().setVisible(true);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -247,8 +287,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField txtBithDate;
-    private javax.swing.JTextField txtCPF;
+    private javax.swing.JFormattedTextField txtBirthData;
+    private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
