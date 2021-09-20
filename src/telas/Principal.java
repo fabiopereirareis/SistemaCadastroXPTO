@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -46,22 +48,32 @@ public class Principal extends javax.swing.JFrame {
         txtCPF.setText("");
         txtBirthData.setText("");
     }
+    
+    public void messageView(String title, String message){
+        JFrame frame = new JFrame(title);
+        JOptionPane.showMessageDialog(frame, message, title, JOptionPane.INFORMATION_MESSAGE);
+       
+    }
 
     public Boolean validateFields() {
         if (txtName.getText().isBlank()) {
             System.out.println("nome");
+            messageView("Campo Obrigatório", "Nome");
             return false;
         }
         if (txtLastName.getText().isBlank()) {
             System.out.println("sobrenome");
+            messageView("Campo Obrigatório", "Sobrenome");
             return false;
         }
         if (txtCPF.getText().equals("   .   .   -  ")) {
             System.out.println("cpf");
+            messageView("Campo Obrigatório", "CPF");
             return false;
         }
         if (txtBirthData.getText().equals("  /  /    ")) {
             System.out.println("data");
+            messageView("Campo Obrigatório", "Data de nascimento");
             return false;
         }
         return true;
@@ -75,6 +87,7 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("Aceito");
             return true;
         } catch (DateTimeParseException e) {
+            messageView("Revise os dados", "Data de nascimento inválida");
             System.out.println("Não Aceito");
             return false;
         }
@@ -99,7 +112,6 @@ public class Principal extends javax.swing.JFrame {
 
     public void createPessoa(Pessoa p) {
         if (pessoas.size() < 10) {
-//        if (cont < 10) {
             if (findByCPF(p)) {
                 pessoas.add(p);
                 System.out.println("Adicionado");
@@ -145,7 +157,6 @@ public class Principal extends javax.swing.JFrame {
             LocalDate date = LocalDate.parse(ageYears, dateTimeFormatter);
             LocalDate dateNow = LocalDate.now();
             int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
-            System.out.println("Int" + diff);
             return diff;
         } catch (DateTimeParseException e) {
             return null;
@@ -355,6 +366,7 @@ public class Principal extends javax.swing.JFrame {
         if (validateFields() && validateBirthDate()) {
             createPessoa(createObjectPessoa());
             tableContent();
+            messageView("Sucesso !", "Candidato cadastrado com sucesso!");
             clearInputs();
 
             
@@ -390,9 +402,7 @@ public class Principal extends javax.swing.JFrame {
 //            long diff = ChronoUnit.YEARS.between(date, dateNow);
             int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
             System.out.println("Long" + diff);
-            year = Long.toString(diff);
-            System.out.println("String" + year);
-           
+            year = Long.toString(diff);           
         } catch (DateTimeParseException e) {
             System.out.println(e);
         }
