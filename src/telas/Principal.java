@@ -54,6 +54,13 @@ public class Principal extends javax.swing.JFrame {
         }
         return true;
     }
+    
+    public String isAdult(String year){
+        if(Integer.parseInt(year) >=18){
+            return "Sim";
+        }
+        return "Não";
+    }
 
     public Pessoa createObjectPessoa() {
         String name = txtName.getText();
@@ -112,12 +119,13 @@ public class Principal extends javax.swing.JFrame {
     
     public void tableContent(){
         DefaultTableModel model = new DefaultTableModel();
-        String adult;
+        
         model.addColumn("Nome");
         model.addColumn("Sobrenome");
         model.addColumn("CPF");
         model.addColumn("Data de Nascimento");
         model.addColumn("Idade");
+        model.addColumn("Maior de idade ?");
         for (int i = 0; i < pessoas.size(); i++) {
             model.addRow(new String[]{
                 pessoas.get(i).getName(),
@@ -125,6 +133,7 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getCPF(),
                 pessoas.get(i).getBirthDate(),
                 ageYears(pessoas.get(i).getBirthDate()).toString(),
+                isAdult(ageYears(pessoas.get(i).getBirthDate()).toString())
                
             });
         }
@@ -230,6 +239,7 @@ public class Principal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel1)
@@ -241,14 +251,13 @@ public class Principal extends javax.swing.JFrame {
                                             .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                                             .addComponent(txtLastName)
                                             .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtCPF)))
-                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtCPF)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(227, 227, 227)
                                 .addComponent(jButton1)
                                 .addGap(46, 46, 46)
                                 .addComponent(jButton2)))
-                        .addGap(0, 112, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(jScrollPane1)))
@@ -308,7 +317,7 @@ public class Principal extends javax.swing.JFrame {
 
         Calendar birthDate = Calendar.getInstance();
         try {
-            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText().toString()));
+            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText()));
             Calendar dateNow = Calendar.getInstance();
             int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
             birthDate.add(Calendar.YEAR, years);
