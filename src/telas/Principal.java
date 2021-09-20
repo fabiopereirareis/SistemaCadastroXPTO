@@ -26,6 +26,7 @@ public class Principal extends javax.swing.JFrame {
 
     /**
      * Creates new form Proncipal
+     *
      * @throws java.text.ParseException
      */
     public Principal() throws ParseException {
@@ -87,6 +88,48 @@ public class Principal extends javax.swing.JFrame {
             }
         }
         return true;
+    }
+
+    public Integer ageYears(String ageYears) {
+        Calendar birthDate = Calendar.getInstance();
+        try {
+            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(ageYears));
+            Calendar dateNow = Calendar.getInstance();
+            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+            birthDate.add(Calendar.YEAR, years);
+            if (dateNow.before(birthDate)) {
+                years--;
+            }
+//            System.out.println(years + "anos");
+            return years;
+
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+    
+    public void tableContent(){
+        DefaultTableModel model = new DefaultTableModel();
+        String adult;
+        model.addColumn("Nome");
+        model.addColumn("Sobrenome");
+        model.addColumn("CPF");
+        model.addColumn("Data de Nascimento");
+        model.addColumn("Idade");
+        for (int i = 0; i < pessoas.size(); i++) {
+            model.addRow(new String[]{
+                pessoas.get(i).getName(),
+                pessoas.get(i).getLastName(),
+                pessoas.get(i).getCPF(),
+                pessoas.get(i).getBirthDate(),
+                ageYears(pessoas.get(i).getBirthDate()).toString(),
+               
+            });
+        }
+        jTable1.setModel(model);
+
     }
 
     /**
@@ -255,6 +298,7 @@ public class Principal extends javax.swing.JFrame {
 
         if (validateFields()) {
             createPessoa(createObjectPessoa());
+            tableContent();
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -266,36 +310,40 @@ public class Principal extends javax.swing.JFrame {
         try {
             birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText().toString()));
             Calendar dateNow = Calendar.getInstance();
-            int years = dateNow.get(Calendar.YEAR ) - birthDate.get(Calendar.YEAR);
+            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
             birthDate.add(Calendar.YEAR, years);
-            if(dateNow.before(birthDate)){
+            if (dateNow.before(birthDate)) {
                 years--;
             }
             System.out.println(years + "anos");
-            
+
         } catch (ParseException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-            // TODO add your handling code here:
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("Nome");
-            model.addColumn("Sobrenome");
-            model.addColumn("CPF");
-            model.addColumn("Data de Nascimento");
-            for(int i = 0; i < pessoas.size(); i++){
-                model.addRow(new String[] {
+        // TODO add your handling code here:
+        String adult;
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nome");
+        model.addColumn("Sobrenome");
+        model.addColumn("CPF");
+        model.addColumn("Data de Nascimento");
+        model.addColumn("Idade");
+        for (int i = 0; i < pessoas.size(); i++) {
+            model.addRow(new String[]{
                 pessoas.get(i).getName(),
                 pessoas.get(i).getLastName(),
                 pessoas.get(i).getCPF(),
-                pessoas.get(i).getBirthDate()
-                });          
-            }
-            jTable1.setModel(model);
-    
+                pessoas.get(i).getBirthDate(),
+                ageYears(pessoas.get(i).getBirthDate()).toString(),
+                
+            });
+        }
+        jTable1.setModel(model);
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
