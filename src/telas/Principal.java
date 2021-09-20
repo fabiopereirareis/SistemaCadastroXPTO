@@ -7,26 +7,20 @@ package telas;
 
 import classes.Pessoa;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author fabinho
+ * @author Fábio Pereira Reis
  */
 public class Principal extends javax.swing.JFrame {
 
@@ -37,24 +31,28 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() throws ParseException {
         initComponents();
-        clearInputs();
+        clearInputs(); // métod para limpar campos
     }
-
-    ArrayList<Pessoa> pessoas = new ArrayList<>();
     
-    public void clearInputs(){
+    // lista de objetos do tipo Pessoa (lista pessoas)
+    ArrayList<Pessoa> pessoas = new ArrayList<>();
+   
+    // método para limpar campos
+    public void clearInputs() {
         txtName.setText("");
         txtLastName.setText("");
         txtCPF.setText("");
         txtBirthData.setText("");
     }
-    
-    public void messageView(String title, String message){
+
+    // método que gera janelas de informação dinâmicas
+    public void messageView(String title, String message) {
         JFrame frame = new JFrame(title);
         JOptionPane.showMessageDialog(frame, message, title, JOptionPane.INFORMATION_MESSAGE);
-       
+
     }
 
+    // método para verificar se os campos estão preenchidos
     public Boolean validateFields() {
         if (txtName.getText().isBlank()) {
             System.out.println("nome");
@@ -79,6 +77,7 @@ public class Principal extends javax.swing.JFrame {
         return true;
     }
 
+    // método que valida se a data de nascimento é válida
     public Boolean validateBirthDate() {
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
@@ -93,6 +92,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    // método que verifica se a pessoa tem idade igual ou maior que 18 anos
     public String isAdult(String year) {
         if (Integer.parseInt(year) >= 18) {
             return "Sim";
@@ -100,7 +100,18 @@ public class Principal extends javax.swing.JFrame {
         return "Não";
     }
 
-    public Pessoa createObjectPessoa() {
+    // método que verificar se o CPF já foi cadastrado
+    public boolean findByCPF(Pessoa p) {
+        for (int i = 0; i < pessoas.size(); i++) {
+            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //  método que constroe um objeto do tipo pessoa
+    public Pessoa buildObjectPessoa() {
         String name = txtName.getText();
         String lastName = txtLastName.getText();
         String strCPF = txtCPF.getText();
@@ -110,6 +121,7 @@ public class Principal extends javax.swing.JFrame {
         return p;
     }
 
+    // método que adiciona um objeto do tipo pessoa na lista de pessoas
     public void createPessoa(Pessoa p) {
         if (pessoas.size() < 10) {
             if (findByCPF(p)) {
@@ -124,33 +136,8 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-    public boolean findByCPF(Pessoa p) {
-        for (int i = 0; i < pessoas.size(); i++) {
-            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Integer ageYears(String ageYears) {
-//        Calendar birthDate = Calendar.getInstance();
-//        try {
-//            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(ageYears));
-//            Calendar dateNow = Calendar.getInstance();
-//            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-//            birthDate.add(Calendar.YEAR, years);
-//            if (dateNow.before(birthDate)) {
-//                years--;
-//            }
-////            System.out.println(years + "anos");
-//            return years;
-//
-//        } catch (ParseException ex) {
-//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return null;
-// ==========================================
+    // método que calcula a idade de uma pessoa
+    public Integer yearsOld(String ageYears) {
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
         try {
@@ -161,9 +148,9 @@ public class Principal extends javax.swing.JFrame {
         } catch (DateTimeParseException e) {
             return null;
         }
-
     }
 
+    // método que alimenta a tabela com a lista de pessoas
     public void tableContent() {
         DefaultTableModel model = new DefaultTableModel();
 
@@ -179,8 +166,8 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getLastName(),
                 pessoas.get(i).getCPF(),
                 pessoas.get(i).getBirthDate(),
-                ageYears(pessoas.get(i).getBirthDate()).toString(),
-                isAdult(ageYears(pessoas.get(i).getBirthDate()).toString())
+                yearsOld(pessoas.get(i).getBirthDate()).toString(),
+                isAdult(yearsOld(pessoas.get(i).getBirthDate()).toString())
 
             });
         }
@@ -364,12 +351,11 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (validateFields() && validateBirthDate()) {
-            createPessoa(createObjectPessoa());
+            createPessoa(buildObjectPessoa());
             tableContent();
             messageView("Sucesso !", "Candidato cadastrado com sucesso!");
             clearInputs();
 
-            
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -392,7 +378,6 @@ public class Principal extends javax.swing.JFrame {
 //            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 // =========================================================================
-        
         String year;
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
@@ -402,11 +387,11 @@ public class Principal extends javax.swing.JFrame {
 //            long diff = ChronoUnit.YEARS.between(date, dateNow);
             int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
             System.out.println("Long" + diff);
-            year = Long.toString(diff);           
+            year = Long.toString(diff);
         } catch (DateTimeParseException e) {
             System.out.println(e);
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -424,7 +409,7 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getLastName(),
                 pessoas.get(i).getCPF(),
                 pessoas.get(i).getBirthDate(),
-                ageYears(pessoas.get(i).getBirthDate()).toString(),});
+                yearsOld(pessoas.get(i).getBirthDate()).toString(),});
         }
         jTable1.setModel(model);
 
@@ -434,13 +419,13 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         String teste = txtBirthData.getText();
         System.out.println(teste);
-        if(teste.equals("  /  /    ")){
+        if (teste.equals("  /  /    ")) {
             System.out.println("Vazio");
-        }else{
+        } else {
             System.out.println("n Vazio");
-            
+
         }
-            
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
