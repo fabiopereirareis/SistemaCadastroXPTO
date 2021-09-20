@@ -8,8 +8,12 @@ package telas;
 import classes.Pessoa;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,19 +48,32 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("sobrenome");
             return false;
         }
-        if (txtCPF.getText().isBlank()) {
+        if (txtCPF.getText().equals("   .   .   -  ")) {
             System.out.println("cpf");
             return false;
         }
-        if (txtBirthData.getText().isBlank()) {
+        if (txtBirthData.getText().equals("  /  /    ")) {
             System.out.println("data");
             return false;
         }
         return true;
     }
-    
-    public String isAdult(String year){
-        if(Integer.parseInt(year) >=18){
+
+    public Boolean validateBirthDate() {
+        String dateFormat = "dd/MM/yyyy";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
+        try {
+            LocalDate birthDate = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
+            System.out.println("Aceito");
+            return true;
+        } catch (DateTimeParseException e) {
+            System.out.println("Não Aceito");
+            return false;
+        }
+    }
+
+    public String isAdult(String year) {
+        if (Integer.parseInt(year) >= 18) {
             return "Sim";
         }
         return "Não";
@@ -116,10 +133,10 @@ public class Principal extends javax.swing.JFrame {
         return null;
 
     }
-    
-    public void tableContent(){
+
+    public void tableContent() {
         DefaultTableModel model = new DefaultTableModel();
-        
+
         model.addColumn("Nome");
         model.addColumn("Sobrenome");
         model.addColumn("CPF");
@@ -134,7 +151,7 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getBirthDate(),
                 ageYears(pessoas.get(i).getBirthDate()).toString(),
                 isAdult(ageYears(pessoas.get(i).getBirthDate()).toString())
-               
+
             });
         }
         jTable1.setModel(model);
@@ -164,6 +181,7 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -228,6 +246,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("jButton4");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -251,13 +276,15 @@ public class Principal extends javax.swing.JFrame {
                                             .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                                             .addComponent(txtLastName)
                                             .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtCPF)))))
+                                            .addComponent(txtCPF))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                        .addComponent(jButton4))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(227, 227, 227)
                                 .addComponent(jButton1)
                                 .addGap(46, 46, 46)
                                 .addComponent(jButton2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE))
+                        .addGap(74, 74, 74))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(jScrollPane1)))
@@ -277,8 +304,9 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -296,7 +324,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
                 .addComponent(jButton3)
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addContainerGap(208, Short.MAX_VALUE))
         );
 
         pack();
@@ -305,9 +333,10 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (validateFields()) {
+        if (validateFields() && validateBirthDate()) {
             createPessoa(createObjectPessoa());
             tableContent();
+            
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -315,21 +344,38 @@ public class Principal extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
 
-        Calendar birthDate = Calendar.getInstance();
-        try {
-            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText()));
-            Calendar dateNow = Calendar.getInstance();
-            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-            birthDate.add(Calendar.YEAR, years);
-            if (dateNow.before(birthDate)) {
-                years--;
-            }
-            System.out.println(years + "anos");
-
-        } catch (ParseException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+//        Calendar birthDate = Calendar.getInstance();
+//        try {
+//            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText()));
+//            Calendar dateNow = Calendar.getInstance();
+//            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+//            birthDate.add(Calendar.YEAR, years);
+//            if (dateNow.before(birthDate)) {
+//                years--;
+//            }
+//            System.out.println(years + "anos");
+//
+//        } catch (ParseException ex) {
+//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+// =========================================================================
+//        Boolean teste = false;
+//        String dateFormat = "dd/MM/yyyy";
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
+//        try {
+//            LocalDate date = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
+//            teste = true;
+//            System.out.println(date.format(dateTimeFormatter) + "" + teste);
+//            LocalDate dateNow = LocalDate.now();
+//            System.out.println("anos" + date + "" + dateNow);
+//            long diff = ChronoUnit.YEARS.between(date, dateNow);
+//
+//            System.out.println("anos" + diff);
+//        } catch (DateTimeParseException e) {
+//            teste = false;
+//            System.out.println(teste);
+//        }
+        System.out.println(validateBirthDate());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -347,13 +393,24 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getLastName(),
                 pessoas.get(i).getCPF(),
                 pessoas.get(i).getBirthDate(),
-                ageYears(pessoas.get(i).getBirthDate()).toString(),
-                
-            });
+                ageYears(pessoas.get(i).getBirthDate()).toString(),});
         }
         jTable1.setModel(model);
 
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String teste = txtBirthData.getText();
+        System.out.println(teste);
+        if(teste.equals("  /  /    ")){
+            System.out.println("Vazio");
+        }else{
+            System.out.println("n Vazio");
+            
+        }
+            
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -404,6 +461,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
