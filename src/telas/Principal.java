@@ -35,9 +35,17 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() throws ParseException {
         initComponents();
+        clearInputs();
     }
 
     ArrayList<Pessoa> pessoas = new ArrayList<>();
+    
+    public void clearInputs(){
+        txtName.setText("");
+        txtLastName.setText("");
+        txtCPF.setText("");
+        txtBirthData.setText("");
+    }
 
     public Boolean validateFields() {
         if (txtName.getText().isBlank()) {
@@ -85,7 +93,6 @@ public class Principal extends javax.swing.JFrame {
         String strCPF = txtCPF.getText();
         String birthDate = txtBirthData.getText();
         Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
-        System.out.println(birthDate);
 
         return p;
     }
@@ -95,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
 //        if (cont < 10) {
             if (findByCPF(p)) {
                 pessoas.add(p);
-                System.out.println("Adiconado");
+                System.out.println("Adicionado");
             } else {
                 System.out.println("Ja existe");
             }
@@ -115,22 +122,34 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public Integer ageYears(String ageYears) {
-        Calendar birthDate = Calendar.getInstance();
+//        Calendar birthDate = Calendar.getInstance();
+//        try {
+//            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(ageYears));
+//            Calendar dateNow = Calendar.getInstance();
+//            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+//            birthDate.add(Calendar.YEAR, years);
+//            if (dateNow.before(birthDate)) {
+//                years--;
+//            }
+////            System.out.println(years + "anos");
+//            return years;
+//
+//        } catch (ParseException ex) {
+//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+// ==========================================
+        String dateFormat = "dd/MM/yyyy";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
         try {
-            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(ageYears));
-            Calendar dateNow = Calendar.getInstance();
-            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-            birthDate.add(Calendar.YEAR, years);
-            if (dateNow.before(birthDate)) {
-                years--;
-            }
-//            System.out.println(years + "anos");
-            return years;
-
-        } catch (ParseException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            LocalDate date = LocalDate.parse(ageYears, dateTimeFormatter);
+            LocalDate dateNow = LocalDate.now();
+            int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
+            System.out.println("Int" + diff);
+            return diff;
+        } catch (DateTimeParseException e) {
+            return null;
         }
-        return null;
 
     }
 
@@ -336,6 +355,8 @@ public class Principal extends javax.swing.JFrame {
         if (validateFields() && validateBirthDate()) {
             createPessoa(createObjectPessoa());
             tableContent();
+            clearInputs();
+
             
         }
 
@@ -359,23 +380,23 @@ public class Principal extends javax.swing.JFrame {
 //            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 // =========================================================================
-//        Boolean teste = false;
-//        String dateFormat = "dd/MM/yyyy";
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
-//        try {
-//            LocalDate date = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
-//            teste = true;
-//            System.out.println(date.format(dateTimeFormatter) + "" + teste);
-//            LocalDate dateNow = LocalDate.now();
-//            System.out.println("anos" + date + "" + dateNow);
+        
+        String year;
+        String dateFormat = "dd/MM/yyyy";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
+        try {
+            LocalDate date = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
+            LocalDate dateNow = LocalDate.now();
 //            long diff = ChronoUnit.YEARS.between(date, dateNow);
-//
-//            System.out.println("anos" + diff);
-//        } catch (DateTimeParseException e) {
-//            teste = false;
-//            System.out.println(teste);
-//        }
-        System.out.println(validateBirthDate());
+            int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
+            System.out.println("Long" + diff);
+            year = Long.toString(diff);
+            System.out.println("String" + year);
+           
+        } catch (DateTimeParseException e) {
+            System.out.println(e);
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
