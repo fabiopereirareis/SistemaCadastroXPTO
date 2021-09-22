@@ -33,10 +33,10 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         clearInputs(); // método para limpar campos
     }
-    
+
     // lista de objetos do tipo Pessoa (lista pessoas)
     ArrayList<Pessoa> pessoas = new ArrayList<>();
-   
+
     // método para limpar campos
     public void clearInputs() {
         txtName.setText("");
@@ -136,7 +136,7 @@ public class Principal extends javax.swing.JFrame {
 
         } else {
             System.out.println("Cheio");
-                messageView("Atenção ", "Limite máximo de cadastros atingido");
+            messageView("Atenção ", "Limite máximo de cadastros atingido");
         }
     }
 
@@ -151,6 +151,83 @@ public class Principal extends javax.swing.JFrame {
             return diff;
         } catch (DateTimeParseException e) {
             return null;
+        }
+    }
+    // método para validar as vagas ofertadas
+    private int countJobs1 = 0;
+    private int countJobs2 = 0;
+    private int countJobs3 = 0;
+    private int countJobs4 = 0;
+    private int countJobs5 = 0;
+// o problema agora é que quando eu tento adicionar uma pessoa em um curso ja cheio e em algum outro
+    // o sistema informa que está cheio porem conta os outros selecionados e habilita o contador individual
+    public Boolean countJobs1() {
+        if (!jobs1.isSelected()) {
+            return true;
+        }
+        if (jobs1.isSelected() && countJobs1 < 3) {
+            System.out.println("vaga1 selecionada");
+            countJobs1++;
+            return true;
+        } else {
+            System.out.println("maximo 1 atingido");
+            return false;
+        }
+    }
+
+    public Boolean countJobs2() {
+        if (!jobs2.isSelected()) {
+            return true;
+        }
+        if (jobs2.isSelected() && countJobs2 < 3) {
+            System.out.println("vaga2 selecionada");
+            countJobs2++;
+            return true;
+        } else {
+            System.out.println("maximo 2 atingido");
+            return false;
+        }
+    }
+
+    public Boolean countJobs3() {
+        if (!jobs3.isSelected()) {
+            return true;
+        }
+        if (jobs3.isSelected() && countJobs3 < 3) {
+            System.out.println("vaga3 selecionada");
+            countJobs3++;
+            return true;
+        } else {
+            System.out.println("maximo 3 atingido");
+            return false;
+        }
+    }
+
+    public Boolean countJobs4() {
+        if (!jobs4.isSelected()) {
+            return true;
+        }
+        if (jobs4.isSelected() && countJobs4 < 3) {
+            System.out.println("vaga4 selecionada");
+            countJobs4++;
+            return true;
+        } else {
+            System.out.println("maximo 4 atingido");
+            return false;
+        }
+    }
+
+    public Boolean countJobs5() {
+        if (!jobs5.isSelected()) {
+            return true;
+        }
+        if (jobs5.isSelected() && countJobs5 < 3) {
+            System.out.println("vaga5 selecionada");
+            countJobs5++;
+            return true;
+        } else {
+            System.out.println("maximo 5 atingido");
+            return false;
         }
     }
 
@@ -203,11 +280,11 @@ public class Principal extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
+        jobs1 = new javax.swing.JCheckBox();
+        jobs2 = new javax.swing.JCheckBox();
+        jobs3 = new javax.swing.JCheckBox();
+        jobs4 = new javax.swing.JCheckBox();
+        jobs5 = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -280,20 +357,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("Trainee 1");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        jobs1.setText("Trainee 1");
+        jobs1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                jobs1ActionPerformed(evt);
             }
         });
 
-        jCheckBox2.setText("Trainee 2");
+        jobs2.setText("Trainee 2");
 
-        jCheckBox3.setText("Trainee 3");
+        jobs3.setText("Trainee 3");
 
-        jCheckBox4.setText("Trainee 4");
+        jobs4.setText("Trainee 4");
 
-        jCheckBox5.setText("Trainee 5");
+        jobs5.setText("Trainee 5");
 
         jLabel5.setText("Vagas disponiveis");
 
@@ -332,12 +409,12 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
+                            .addComponent(jobs1)
                             .addComponent(jLabel5)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox4)
-                            .addComponent(jCheckBox5))
+                            .addComponent(jobs2)
+                            .addComponent(jobs3)
+                            .addComponent(jobs4)
+                            .addComponent(jobs5))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(176, 176, 176))
             .addGroup(layout.createSequentialGroup()
@@ -364,23 +441,23 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
+                            .addComponent(jobs1)
                             .addComponent(jLabel1)
                             .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                        .addComponent(jobs3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jobs4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jobs5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBox2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jobs2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
@@ -412,11 +489,18 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (validateFields() && validateBirthDate()) {
+        if (validateFields() && validateBirthDate()
+                && countJobs1() && countJobs2()
+                && countJobs3() && countJobs4()
+                && countJobs5()) {
             createPessoa(buildObjectPessoa());
             tableContent();
             clearInputs();
-
+            System.out.println(countJobs1);
+            System.out.println(countJobs2);
+            System.out.println(countJobs3);
+            System.out.println(countJobs4);
+            System.out.println(countJobs5);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -488,9 +572,9 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void jobs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jobs1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_jobs1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -530,8 +614,10 @@ public class Principal extends javax.swing.JFrame {
             public void run() {
                 try {
                     new Principal().setVisible(true);
+
                 } catch (ParseException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Principal.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -542,11 +628,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -555,6 +636,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JCheckBox jobs1;
+    private javax.swing.JCheckBox jobs2;
+    private javax.swing.JCheckBox jobs3;
+    private javax.swing.JCheckBox jobs4;
+    private javax.swing.JCheckBox jobs5;
     private javax.swing.JFormattedTextField txtBirthData;
     private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JTextField txtLastName;
