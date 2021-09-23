@@ -43,6 +43,12 @@ public class Principal extends javax.swing.JFrame {
         txtLastName.setText("");
         txtCPF.setText("");
         txtBirthData.setText("");
+        jobs1.setSelected(false);
+        jobs2.setSelected(false);
+        jobs3.setSelected(false);
+        jobs4.setSelected(false);
+        jobs5.setSelected(false);
+
     }
 
     // método que gera janelas de informação dinâmicas
@@ -55,23 +61,19 @@ public class Principal extends javax.swing.JFrame {
     // método para verificar se os campos estão preenchidos
     public Boolean validateFields() {
         if (txtName.getText().isBlank()) {
-            System.out.println("nome");
-            messageView("Campo Obrigatório", "Nome");
+            messageView("Campo Obrigatório", "Por favor preencher o campo nome");
             return false;
         }
         if (txtLastName.getText().isBlank()) {
-            System.out.println("sobrenome");
-            messageView("Campo Obrigatório", "Sobrenome");
+            messageView("Campo Obrigatório", "Por favor preencher o campo sobrenome");
             return false;
         }
         if (txtCPF.getText().equals("   .   .   -  ")) {
-            System.out.println("cpf");
-            messageView("Campo Obrigatório", "CPF");
+            messageView("Campo Obrigatório", "Por favor preencher o campo CPF");
             return false;
         }
         if (txtBirthData.getText().equals("  /  /    ")) {
-            System.out.println("data");
-            messageView("Campo Obrigatório", "Data de nascimento");
+            messageView("Campo Obrigatório", "Por favor preencher o campo data de nascimento");
             return false;
         }
         return true;
@@ -136,7 +138,7 @@ public class Principal extends javax.swing.JFrame {
 
         } else {
             System.out.println("Cheio");
-            messageView("Atenção ", "Limite máximo de cadastros atingido");
+            messageView("Atenção ", "Limite máximo de candidatos atingido");
         }
     }
 
@@ -161,73 +163,66 @@ public class Principal extends javax.swing.JFrame {
     private int countJobs5 = 0;
 // o problema agora é que quando eu tento adicionar uma pessoa em um curso ja cheio e em algum outro
     // o sistema informa que está cheio porem conta os outros selecionados e habilita o contador individual
-    public Boolean countJobs1() {
+    // tentar mudar de booblean para int e atribuir cada valor separadamente 0 = não selecionado 1 = para selecionade e menor que 3 e 2 = para maximo 
+
+    public void countJobs1() {
         if (!jobs1.isSelected()) {
-            return true;
-        }
-        if (jobs1.isSelected() && countJobs1 < 3) {
+        } else if (jobs1.isSelected() && countJobs1 < 3) {
             System.out.println("vaga1 selecionada");
             countJobs1++;
-            return true;
         } else {
-            System.out.println("maximo 1 atingido");
-            return false;
+            messageView("Vagas para Trainee 1", "Capacidade máxima de candidatos atingido !");
+            jobs1.setSelected(false);
+            jobs1.setEnabled(false);
+
         }
     }
 
-    public Boolean countJobs2() {
+    public void countJobs2() {
         if (!jobs2.isSelected()) {
-            return true;
-        }
-        if (jobs2.isSelected() && countJobs2 < 3) {
+        } else if (jobs2.isSelected() && countJobs2 < 3) {
             System.out.println("vaga2 selecionada");
             countJobs2++;
-            return true;
         } else {
-            System.out.println("maximo 2 atingido");
-            return false;
+            messageView("Vagas para Trainee 2", "Capacidade máxima de candidatos atingido !");
+            jobs2.setSelected(false);
+            jobs2.setEnabled(false);
         }
     }
 
-    public Boolean countJobs3() {
+    public void countJobs3() {
         if (!jobs3.isSelected()) {
-            return true;
-        }
-        if (jobs3.isSelected() && countJobs3 < 3) {
+        } else if (jobs3.isSelected() && countJobs3 < 3) {
             System.out.println("vaga3 selecionada");
             countJobs3++;
-            return true;
         } else {
-            System.out.println("maximo 3 atingido");
-            return false;
+            messageView("Vagas para Trainee 3", "Capacidade máxima de candidatos atingido !");        
+            jobs3.setSelected(false);
+            jobs3.setEnabled(false);
         }
     }
 
-    public Boolean countJobs4() {
+    public void countJobs4() {
         if (!jobs4.isSelected()) {
-            return true;
-        }
-        if (jobs4.isSelected() && countJobs4 < 3) {
+        } else if (jobs4.isSelected() && countJobs4 < 3) {
             System.out.println("vaga4 selecionada");
             countJobs4++;
-            return true;
         } else {
-            System.out.println("maximo 4 atingido");
-            return false;
+            messageView("Vagas para Trainee 4", "Capacidade máxima de candidatos atingido !");
+            jobs4.setSelected(false);
+            jobs4.setEnabled(false);
         }
     }
 
-    public Boolean countJobs5() {
+    public void countJobs5() {
         if (!jobs5.isSelected()) {
-            return true;
-        }
-        if (jobs5.isSelected() && countJobs5 < 3) {
+        } else if (jobs5.isSelected() && countJobs5 < 3) {
             System.out.println("vaga5 selecionada");
             countJobs5++;
-            return true;
         } else {
-            System.out.println("maximo 5 atingido");
-            return false;
+            messageView("Vagas para Trainee 5", "Capacidade máxima de candidatos atingido !");
+            jobs5.setSelected(false);
+            jobs5.setEnabled(false);
         }
     }
 
@@ -405,18 +400,19 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(0, 210, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(47, 47, 47))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jobs1)
                             .addComponent(jLabel5)
-                            .addComponent(jobs2)
-                            .addComponent(jobs3)
                             .addComponent(jobs4)
-                            .addComponent(jobs5))
+                            .addComponent(jobs5)
+                            .addComponent(jobs2)
+                            .addComponent(jobs3))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(176, 176, 176))
+                .addGap(129, 129, 129))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
                 .addContainerGap())
@@ -489,20 +485,16 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (validateFields() && validateBirthDate()
-                && countJobs1() && countJobs2()
-                && countJobs3() && countJobs4()
-                && countJobs5()) {
+        if (validateFields() && validateBirthDate()) {
+            countJobs1();
+            countJobs2();
+            countJobs3();
+            countJobs4();
+            countJobs5();
             createPessoa(buildObjectPessoa());
             tableContent();
             clearInputs();
-            System.out.println(countJobs1);
-            System.out.println(countJobs2);
-            System.out.println(countJobs3);
-            System.out.println(countJobs4);
-            System.out.println(countJobs5);
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -561,14 +553,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        String teste = txtBirthData.getText();
-        System.out.println(teste);
-        if (teste.equals("  /  /    ")) {
-            System.out.println("Vazio");
-        } else {
-            System.out.println("n Vazio");
-
-        }
+        jobs1.setSelected(false);
+            jobs1.setEnabled(false);
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
