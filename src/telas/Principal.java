@@ -6,6 +6,10 @@
 package telas;
 
 import classes.Pessoa;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +18,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -84,13 +90,10 @@ public class Principal extends javax.swing.JFrame {
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
         try {
-//            LocalDate birthDate = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
             LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
-            System.out.println("Aceito");
             return true;
         } catch (DateTimeParseException e) {
             messageView("Revise os dados", "Data de nascimento inválida");
-            System.out.println("Não Aceito");
             return false;
         }
     }
@@ -104,9 +107,19 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // método que verificar se o CPF já foi cadastrado
-    public boolean findByCPF(Pessoa p) {
+//    public boolean findByCPF(Pessoa p) {
+//        for (int i = 0; i < pessoas.size(); i++) {
+//            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+    // método  que verificar se o CPF já foi cadastrado
+    public boolean validateCPF(String cpf) {
         for (int i = 0; i < pessoas.size(); i++) {
-            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
+            if (cpf.equals(pessoas.get(i).getCPF())) {
+                messageView("Atenção ", "Candidato já adicionado no sistema, CPF duplicado");
                 return false;
             }
         }
@@ -122,27 +135,23 @@ public class Principal extends javax.swing.JFrame {
         Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
 
         return p;
+
     }
 
     // método que adiciona um objeto do tipo pessoa na lista de pessoas
     public void createPessoa(Pessoa p) {
         if (pessoas.size() < 10) {
-            if (findByCPF(p)) {
-                pessoas.add(p);
-                System.out.println("Adicionado");
-                messageView("Sucesso !", "Candidato adicionado com sucesso!");
-            } else {
-                System.out.println("Ja existe");
-                messageView("Atenção ", "Candidato já adicionado no sistema");
-            }
-
+            pessoas.add(p);
+            countJobs();
+            System.out.println("Adicionado");
+            messageView("Sucesso !", "Candidato adicionado com sucesso!");
+            clearInputs();
         } else {
-            System.out.println("Cheio");
             messageView("Atenção ", "Limite máximo de candidatos atingido");
         }
     }
-
     // método que calcula a idade de uma pessoa
+
     public Integer yearsOld(String ageYears) {
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
@@ -156,6 +165,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
     // método para validar as vagas ofertadas
+    // variáveis de contagem das vagas
     private int countJobs1 = 0;
     private int countJobs2 = 0;
     private int countJobs3 = 0;
@@ -165,65 +175,75 @@ public class Principal extends javax.swing.JFrame {
     // o sistema informa que está cheio porem conta os outros selecionados e habilita o contador individual
     // tentar mudar de booblean para int e atribuir cada valor separadamente 0 = não selecionado 1 = para selecionade e menor que 3 e 2 = para maximo 
 
-    public void countJobs1() {
-        if (!jobs1.isSelected()) {
-        } else if (jobs1.isSelected() && countJobs1 < 3) {
-            System.out.println("vaga1 selecionada");
+    public void countJobs() {
+
+        if (jobs1.isSelected()) {
             countJobs1++;
-        } else {
-            messageView("Vagas para Trainee 1", "Capacidade máxima de candidatos atingido !");
-            jobs1.setSelected(false);
-            jobs1.setEnabled(false);
-
+            if (countJobs1 >= 3) {
+                jobs1.setSelected(false);
+                jobs1.setEnabled(false);
+            }
         }
-    }
-
-    public void countJobs2() {
-        if (!jobs2.isSelected()) {
-        } else if (jobs2.isSelected() && countJobs2 < 3) {
-            System.out.println("vaga2 selecionada");
+        if (jobs2.isSelected()) {
             countJobs2++;
-        } else {
-            messageView("Vagas para Trainee 2", "Capacidade máxima de candidatos atingido !");
-            jobs2.setSelected(false);
-            jobs2.setEnabled(false);
+            if (countJobs2 >= 3) {
+                jobs2.setSelected(false);
+                jobs2.setEnabled(false);
+            }
         }
-    }
-
-    public void countJobs3() {
-        if (!jobs3.isSelected()) {
-        } else if (jobs3.isSelected() && countJobs3 < 3) {
-            System.out.println("vaga3 selecionada");
+        if (jobs3.isSelected()) {
             countJobs3++;
-        } else {
-            messageView("Vagas para Trainee 3", "Capacidade máxima de candidatos atingido !");        
-            jobs3.setSelected(false);
-            jobs3.setEnabled(false);
+            if (countJobs3 >= 3) {
+                jobs3.setSelected(false);
+                jobs3.setEnabled(false);
+            }
         }
-    }
-
-    public void countJobs4() {
-        if (!jobs4.isSelected()) {
-        } else if (jobs4.isSelected() && countJobs4 < 3) {
-            System.out.println("vaga4 selecionada");
+        if (jobs4.isSelected()) {
             countJobs4++;
-        } else {
-            messageView("Vagas para Trainee 4", "Capacidade máxima de candidatos atingido !");
-            jobs4.setSelected(false);
-            jobs4.setEnabled(false);
+            if (countJobs4 >= 3) {
+                jobs4.setSelected(false);
+                jobs4.setEnabled(false);
+            }
         }
+        if (jobs5.isSelected()) {
+            countJobs5++;
+            if (countJobs5 >= 3) {
+                jobs5.setSelected(false);
+                jobs5.setEnabled(false);
+            }
+        }
+
     }
 
-    public void countJobs5() {
-        if (!jobs5.isSelected()) {
-        } else if (jobs5.isSelected() && countJobs5 < 3) {
-            System.out.println("vaga5 selecionada");
-            countJobs5++;
-        } else {
-            messageView("Vagas para Trainee 5", "Capacidade máxima de candidatos atingido !");
-            jobs5.setSelected(false);
-            jobs5.setEnabled(false);
+    public boolean validateJobs() {
+        boolean isValid = true;
+//        countJobs1();
+//        countJobs2();
+//        countJobs3();
+//        countJobs4();
+//        countJobs5();
+
+        if (jobs1.isSelected() && countJobs1 == 3) {
+            messageView("Vagas para Trainee 1", "Capacidade máxima de candidatos atingido !");
+            isValid = false;
         }
+        if (jobs2.isSelected() && countJobs2 == 3) {
+            messageView("Vagas para Trainee 2", "Capacidade máxima de candidatos atingido !");
+            isValid = false;
+        }
+        if (jobs3.isSelected() && countJobs3 == 3) {
+            messageView("Vagas para Trainee 3", "Capacidade máxima de candidatos atingido !");
+            isValid = false;
+        }
+        if (jobs4.isSelected() && countJobs4 == 3) {
+            messageView("Vagas para Trainee 4", "Capacidade máxima de candidatos atingido !");
+            isValid = false;
+        }
+        if (jobs5.isSelected() && countJobs5 == 3) {
+            messageView("Vagas para Trainee 5", "Capacidade máxima de candidatos atingido !");
+            isValid = false;
+        }
+        return isValid;
     }
 
     // método que alimenta a tabela com a lista de pessoas
@@ -397,10 +417,13 @@ public class Principal extends javax.swing.JFrame {
                                     .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 210, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 213, Short.MAX_VALUE)
+                                .addComponent(jButton4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2)))
                         .addGap(47, 47, 47))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
@@ -414,7 +437,7 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(129, 129, 129))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jSeparator1)
@@ -485,36 +508,21 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        if (validateFields() && validateBirthDate()) {
-            countJobs1();
-            countJobs2();
-            countJobs3();
-            countJobs4();
-            countJobs5();
+        if (validateFields() && validateBirthDate() && validateCPF(txtCPF.getText()) && validateJobs()) {
             createPessoa(buildObjectPessoa());
             tableContent();
             clearInputs();
         }
+        System.out.println(countJobs1);
+        System.out.println(countJobs2);
+        System.out.println(countJobs3);
+        System.out.println(countJobs4);
+        System.out.println(countJobs5);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
 
-//        Calendar birthDate = Calendar.getInstance();
-//        try {
-//            birthDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(txtBirthData.getText()));
-//            Calendar dateNow = Calendar.getInstance();
-//            int years = dateNow.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-//            birthDate.add(Calendar.YEAR, years);
-//            if (dateNow.before(birthDate)) {
-//                years--;
-//            }
-//            System.out.println(years + "anos");
-//
-//        } catch (ParseException ex) {
-//            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-// =========================================================================
         String year;
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
@@ -533,28 +541,51 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Nome");
-        model.addColumn("Sobrenome");
-        model.addColumn("CPF");
-        model.addColumn("Data de Nascimento");
-        model.addColumn("Idade");
-        for (int i = 0; i < pessoas.size(); i++) {
-            model.addRow(new String[]{
-                pessoas.get(i).getName(),
-                pessoas.get(i).getLastName(),
-                pessoas.get(i).getCPF(),
-                pessoas.get(i).getBirthDate(),
-                yearsOld(pessoas.get(i).getBirthDate()).toString(),});
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        jfc.setDialogTitle("Choose a directory to save your file: ");
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int returnValue = jfc.showSaveDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            if (jfc.getSelectedFile().isDirectory()) {
+                System.out.println("You selected the directory: " + jfc.getSelectedFile());
+            }
         }
-        jTable1.setModel(model);
+
+        StringBuilder saida = new StringBuilder();
+        saida.append("Nome;Sobrenome;CPF;Data nascimento;Idade")
+                .append("\n");
+        for (int i = 0; i < pessoas.size(); i++) {
+            saida.append(pessoas.get(i).getName())
+                    .append(";")
+                    .append(pessoas.get(i).getLastName())
+                    .append(";")
+                    .append(pessoas.get(i).getCPF())
+                    .append(";")
+                    .append(pessoas.get(i).getBirthDate())
+                    .append(";")
+                    .append(yearsOld(pessoas.get(i).getBirthDate().toString()))
+                    .append(";")
+                    .append("\n");
+
+        }
+
+        PrintWriter pw;
+        try {
+            pw = new PrintWriter(new FileOutputStream(jfc.getSelectedFile() + File.separator + "saida.csv"));
+            pw.write(saida.toString());
+            pw.flush();
+            pw.close();
+        } catch (Exception ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         jobs1.setSelected(false);
-            jobs1.setEnabled(false);
+        jobs1.setEnabled(false);
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
