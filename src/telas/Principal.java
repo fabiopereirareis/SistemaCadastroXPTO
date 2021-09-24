@@ -56,6 +56,22 @@ public class Principal extends javax.swing.JFrame {
         jobs5.setSelected(false);
 
     }
+    // método para resetar alguns parametros depois de salvar a lista
+    public void resetFormInputs(){
+        pessoas.clear();
+        tableContent();
+        jobs1.setEnabled(true);
+        jobs2.setEnabled(true);
+        jobs3.setEnabled(true);
+        jobs4.setEnabled(true);
+        jobs5.setEnabled(true);
+        countJobs1 = 0;
+        countJobs2 = 0;
+        countJobs3 = 0;
+        countJobs4 = 0;
+        countJobs5 = 0;
+        
+    }
 
     // método que gera janelas de informação dinâmicas
     public void messageView(String title, String message) {
@@ -106,15 +122,6 @@ public class Principal extends javax.swing.JFrame {
         return "Não";
     }
 
-    // método que verificar se o CPF já foi cadastrado
-//    public boolean findByCPF(Pessoa p) {
-//        for (int i = 0; i < pessoas.size(); i++) {
-//            if (p.getCPF().equals(pessoas.get(i).getCPF())) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
     // método  que verificar se o CPF já foi cadastrado
     public boolean validateCPF(String cpf) {
         for (int i = 0; i < pessoas.size(); i++) {
@@ -135,7 +142,6 @@ public class Principal extends javax.swing.JFrame {
         Pessoa p = new Pessoa(name, lastName, strCPF, birthDate);
 
         return p;
-
     }
 
     // método que adiciona um objeto do tipo pessoa na lista de pessoas
@@ -143,15 +149,14 @@ public class Principal extends javax.swing.JFrame {
         if (pessoas.size() < 10) {
             pessoas.add(p);
             countJobs();
-            System.out.println("Adicionado");
             messageView("Sucesso !", "Candidato adicionado com sucesso!");
             clearInputs();
         } else {
             messageView("Atenção ", "Limite máximo de candidatos atingido");
         }
     }
-    // método que calcula a idade de uma pessoa
 
+    // método que calcula a idade de uma pessoa
     public Integer yearsOld(String ageYears) {
         String dateFormat = "dd/MM/yyyy";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
@@ -164,22 +169,20 @@ public class Principal extends javax.swing.JFrame {
             return null;
         }
     }
-    // método para validar as vagas ofertadas
     // variáveis de contagem das vagas
     private int countJobs1 = 0;
     private int countJobs2 = 0;
     private int countJobs3 = 0;
     private int countJobs4 = 0;
     private int countJobs5 = 0;
-// o problema agora é que quando eu tento adicionar uma pessoa em um curso ja cheio e em algum outro
-    // o sistema informa que está cheio porem conta os outros selecionados e habilita o contador individual
-    // tentar mudar de booblean para int e atribuir cada valor separadamente 0 = não selecionado 1 = para selecionade e menor que 3 e 2 = para maximo 
 
+    // método para contar as vagas e desabilitar os checkBox
     public void countJobs() {
 
         if (jobs1.isSelected()) {
             countJobs1++;
             if (countJobs1 >= 3) {
+                messageView("Limite atingido para vagas 1", "Quantidade máxima de candidatos atingida");
                 jobs1.setSelected(false);
                 jobs1.setEnabled(false);
             }
@@ -187,6 +190,7 @@ public class Principal extends javax.swing.JFrame {
         if (jobs2.isSelected()) {
             countJobs2++;
             if (countJobs2 >= 3) {
+                messageView("Limite atingido para vagas 2", "Quantidade máxima de candidatos atingida");
                 jobs2.setSelected(false);
                 jobs2.setEnabled(false);
             }
@@ -194,6 +198,7 @@ public class Principal extends javax.swing.JFrame {
         if (jobs3.isSelected()) {
             countJobs3++;
             if (countJobs3 >= 3) {
+                messageView("Limite atingido para vagas 3", "Quantidade máxima de candidatos atingida");
                 jobs3.setSelected(false);
                 jobs3.setEnabled(false);
             }
@@ -201,6 +206,7 @@ public class Principal extends javax.swing.JFrame {
         if (jobs4.isSelected()) {
             countJobs4++;
             if (countJobs4 >= 3) {
+                messageView("Limite atingido para vagas 4", "Quantidade máxima de candidatos atingida");
                 jobs4.setSelected(false);
                 jobs4.setEnabled(false);
             }
@@ -208,6 +214,7 @@ public class Principal extends javax.swing.JFrame {
         if (jobs5.isSelected()) {
             countJobs5++;
             if (countJobs5 >= 3) {
+                messageView("Limite atingido para vagas 5", "Quantidade máxima de candidatos atingida");
                 jobs5.setSelected(false);
                 jobs5.setEnabled(false);
             }
@@ -215,32 +222,23 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
+    // método de validação das vagas
     public boolean validateJobs() {
         boolean isValid = true;
-//        countJobs1();
-//        countJobs2();
-//        countJobs3();
-//        countJobs4();
-//        countJobs5();
 
         if (jobs1.isSelected() && countJobs1 == 3) {
-            messageView("Vagas para Trainee 1", "Capacidade máxima de candidatos atingido !");
             isValid = false;
         }
         if (jobs2.isSelected() && countJobs2 == 3) {
-            messageView("Vagas para Trainee 2", "Capacidade máxima de candidatos atingido !");
             isValid = false;
         }
         if (jobs3.isSelected() && countJobs3 == 3) {
-            messageView("Vagas para Trainee 3", "Capacidade máxima de candidatos atingido !");
             isValid = false;
         }
         if (jobs4.isSelected() && countJobs4 == 3) {
-            messageView("Vagas para Trainee 4", "Capacidade máxima de candidatos atingido !");
             isValid = false;
         }
         if (jobs5.isSelected() && countJobs5 == 3) {
-            messageView("Vagas para Trainee 5", "Capacidade máxima de candidatos atingido !");
             isValid = false;
         }
         return isValid;
@@ -264,7 +262,6 @@ public class Principal extends javax.swing.JFrame {
                 pessoas.get(i).getBirthDate(),
                 yearsOld(pessoas.get(i).getBirthDate()).toString(),
                 isAdult(yearsOld(pessoas.get(i).getBirthDate()).toString())
-
             });
         }
         jTable1.setModel(model);
@@ -288,19 +285,19 @@ public class Principal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         txtBirthData = new javax.swing.JFormattedTextField();
         txtCPF = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jobs1 = new javax.swing.JCheckBox();
         jobs2 = new javax.swing.JCheckBox();
         jobs3 = new javax.swing.JCheckBox();
         jobs4 = new javax.swing.JCheckBox();
         jobs5 = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -318,13 +315,6 @@ public class Principal extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
             }
         });
 
@@ -365,13 +355,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("jButton4");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         jobs1.setText("Trainee 1");
         jobs1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,65 +372,62 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel5.setText("Vagas disponiveis");
 
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setText("Processo Trainee 2021");
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/telas/logo.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 932, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtLastName)
-                                    .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))))))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 213, Short.MAX_VALUE)
-                                .addComponent(jButton4))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)))
-                        .addGap(47, 47, 47))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jobs1)
-                            .addComponent(jLabel5)
-                            .addComponent(jobs4)
-                            .addComponent(jobs5)
-                            .addComponent(jobs2)
-                            .addComponent(jobs3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(129, 129, 129))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(57, 57, 57)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel3)
+                                                    .addComponent(jLabel2))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(txtLastName)
+                                                    .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel6)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(jLabel1)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jobs2)
+                                    .addComponent(jobs3)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jobs1)
+                                    .addComponent(jobs4)
+                                    .addComponent(jobs5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(222, 222, 222)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton3)
+                                    .addComponent(jButton1))))
+                        .addGap(77, 77, 77)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jSeparator1)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(222, 222, 222)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -455,38 +435,45 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(46, 46, 46)
-                        .addComponent(jLabel5)
-                        .addGap(41, 41, 41))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jobs1)
-                            .addComponent(jLabel1)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jobs3, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jobs4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jobs5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jobs2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)))
-                .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addGap(41, 41, 41))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(98, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jobs1)
+                                    .addComponent(jLabel1)
+                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(jobs3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jobs4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jobs2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtBirthData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(7, 7, 7)))
+                        .addComponent(jobs5)
+                        .addGap(87, 87, 87)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
@@ -494,11 +481,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(jButton3)
-                .addGap(4, 4, 4)
-                .addComponent(jButton4)
-                .addGap(12, 12, 12)
-                .addComponent(jButton2)
-                .addGap(230, 230, 230))
+                .addGap(47, 47, 47))
         );
 
         pack();
@@ -520,38 +503,21 @@ public class Principal extends javax.swing.JFrame {
         System.out.println(countJobs5);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-
-        String year;
-        String dateFormat = "dd/MM/yyyy";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
-        try {
-            LocalDate date = LocalDate.parse(txtBirthData.getText(), dateTimeFormatter);
-            LocalDate dateNow = LocalDate.now();
-//            long diff = ChronoUnit.YEARS.between(date, dateNow);
-            int diff = (int) ChronoUnit.YEARS.between(date, dateNow);
-            System.out.println("Long" + diff);
-            year = Long.toString(diff);
-        } catch (DateTimeParseException e) {
-            System.out.println(e);
-        }
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        // função para selecionar o diretório para salvar o arquivo
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        jfc.setDialogTitle("Choose a directory to save your file: ");
+        jfc.setDialogTitle("Escolha um diretório para salvar o arquivo: ");
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int returnValue = jfc.showSaveDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             if (jfc.getSelectedFile().isDirectory()) {
-                System.out.println("You selected the directory: " + jfc.getSelectedFile());
+                System.out.println("Diretório selecionado: " + jfc.getSelectedFile());
             }
         }
-
+        // =====================================================================
+        // criação do arquivo de texto com a lista dos candidatos
         StringBuilder saida = new StringBuilder();
         saida.append("Nome;Sobrenome;CPF;Data nascimento;Idade")
                 .append("\n");
@@ -564,30 +530,25 @@ public class Principal extends javax.swing.JFrame {
                     .append(";")
                     .append(pessoas.get(i).getBirthDate())
                     .append(";")
-                    .append(yearsOld(pessoas.get(i).getBirthDate().toString()))
+                    .append(yearsOld(pessoas.get(i).getBirthDate()))
                     .append(";")
                     .append("\n");
-
         }
-
+        // =====================================================================
+        // função que exporta a lista com os dados dos candidatos para um arquivo csv
         PrintWriter pw;
         try {
             pw = new PrintWriter(new FileOutputStream(jfc.getSelectedFile() + File.separator + "saida.csv"));
             pw.write(saida.toString());
             pw.flush();
             pw.close();
-        } catch (Exception ex) {
+            messageView("Lista enviada", "Candidatos cadastrados com sucesso !");
+            resetFormInputs();
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        jobs1.setSelected(false);
-        jobs1.setEnabled(false);
-
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jobs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jobs1ActionPerformed
         // TODO add your handling code here:
@@ -642,14 +603,14 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
